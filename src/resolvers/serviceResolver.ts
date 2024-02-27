@@ -1,5 +1,5 @@
 import { ServiceSchema } from "../models/services"; 
-import { authenticateJWT } from '../middlewares/authenticationJWT';
+import { sendNotifications } from "../hooks/webhookSender";
 
 const serviceResolver = {
     Query: {
@@ -15,6 +15,12 @@ const serviceResolver = {
             const { name, price } = args.service;
             try {
                 const newService = await ServiceSchema.create({ name, price });
+                const data = {
+                    evento: "createService",
+                    message: "Se ha creado un nuevo Servicio",
+                    data: newService
+                }
+                sendNotifications(data)
                 return newService
             } catch (error) {
                 console.error(error);
@@ -28,6 +34,12 @@ const serviceResolver = {
 
             try {
                 const deleteService = await ServiceSchema.findByIdAndDelete(args.service.id );
+                const data = {
+                    evento: "deleteService",
+                    message: "Se ha eliminado un nuevo Servicio",
+                    data: deleteService
+                }
+                sendNotifications(data)
                 return deleteService
             } catch (error) {
                 console.error(error);

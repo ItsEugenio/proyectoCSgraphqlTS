@@ -1,5 +1,5 @@
 import { ProductSchema } from "../models/products";
-
+import { sendNotifications } from "../hooks/webhookSender";
 const productResolver = {
     Query: {
         getProducts: async () => await ProductSchema.find(),
@@ -20,6 +20,12 @@ const productResolver = {
             const { name, stock, type, price } = args.product;
             try {
                 const newProduct = await ProductSchema.create({ name, stock, type, price });
+                const data = {
+                    evento: "createProductos",
+                    message: "Se ha creado un nuevo producto",
+                    data: newProduct
+                }
+                sendNotifications(data)
                 return newProduct
             } catch (error) {
                 console.error(error);
@@ -33,6 +39,12 @@ const productResolver = {
 
             try {
                 const deleteProduct = await ProductSchema.findByIdAndDelete(args.product.id);
+                const data = {
+                    evento: "deleteProductos",
+                    message: "Se ha eliminado un nuevo producto",
+                    data: deleteProduct
+                }
+                sendNotifications(data)
                 return deleteProduct
             } catch (error) {
                 console.error(error);

@@ -8,6 +8,8 @@ interface Consumer {
   createProductos: boolean;
   deleteProductos: boolean;
   createServicios: boolean;
+  createService: boolean;
+  deleteService: boolean;
 }
 
 const consumerSchema = new Schema<Consumer>({
@@ -33,6 +35,12 @@ const consumerSchema = new Schema<Consumer>({
     type: Boolean
   },
   createServicios: {
+    type: Boolean
+  },
+  createService: {
+    type: Boolean
+  },
+  deleteService: {
     type: Boolean
   }
 });
