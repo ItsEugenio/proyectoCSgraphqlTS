@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user';
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 interface RequestWithUser extends Request {
   user?: any;
@@ -16,22 +17,17 @@ export function generateToken(username: string): string {
 
 export async function authenticateJWT(req: RequestWithUser, res: Response, next: NextFunction) {
   const token = req.headers.authorization?.split(' ')[1];
+  if (token) {
+    try {
+      const decodedToken: any = jwt.verify(token, JWT_SECRET);
+      const user = await UserModel.findOne({ username: decodedToken.username });
 
-  if (!token) {
-    return res.status(401).json({ message: 'Token de autenticación no proporcionado' });
-  }
-
-  try {
-    const decodedToken: any = jwt.verify(token, JWT_SECRET);
-    const user = await UserModel.findOne({ username: decodedToken.username });
-
-    if (!user) {
-      return res.status(401).json({ message: 'Usuario no encontrado' });
+      if (user) {
+        req.user = user;
+      }
+    } catch (error) {
     }
-
-    req.user = user;
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: 'Token de autenticación inválido' });
   }
+
+  next();
 }

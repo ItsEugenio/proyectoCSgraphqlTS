@@ -1,4 +1,5 @@
 import { ServiceSchema } from "../models/services"; 
+import { authenticateJWT } from '../middlewares/authenticationJWT';
 
 const serviceResolver = {
     Query: {
@@ -6,7 +7,12 @@ const serviceResolver = {
         service: async (_parent: any, args: any) => await ServiceSchema.findById(args.id),
     },
     Mutation: {
-        createService: async (_: void, args:any) =>{
+        createService: async (_: void, args:any, { user }: { user: any }) =>{
+            // Verificar si el usuario está autenticado
+            if (!user) {
+                throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
+            }
+
             const { name, price } = args.service;
             try {
                 const newService = await ServiceSchema.create({ name, price });
@@ -16,7 +22,12 @@ const serviceResolver = {
                 return { error: 'Hubo un error' };
             }
         },
-        deleteService: async (_: void, args:any) =>{
+        deleteService: async (_: void, args:any, { user }: { user: any }) =>{
+            // Verificar si el usuario está autenticado
+            if (!user) {
+                throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
+            }
+
             try {
                 const deleteService = await ServiceSchema.findByIdAndDelete(args.service.id );
                 return deleteService

@@ -1,6 +1,7 @@
-import { PromotionSchema } from "../models/promotion"; 
+import { PromotionSchema } from "../models/promotion";
+import { authenticateJWT } from '../middlewares/authenticationJWT';
 
-const  promotionResolver = {
+const promotionResolver = {
     Query: {
         getPromotions: async () => await PromotionSchema.find(),
         promotionByID: async (_parent: any, args: any) => await PromotionSchema.findById(args.id),
@@ -11,7 +12,12 @@ const  promotionResolver = {
         }
     },
     Mutation: {
-        createPromo: async (_: void, args:any) =>{
+        createPromo: async (_: void, args: any, { user }: { user: any }) => {
+            // Verificar si el usuario está autenticado
+            if (!user) {
+                throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
+            }
+
             const { description } = args.promotion;
             try {
                 const newPromo = await PromotionSchema.create({ description });
@@ -21,9 +27,14 @@ const  promotionResolver = {
                 return { error: 'Hubo un error' };
             }
         },
-        deletePromo: async (_: void, args:any) =>{
+        deletePromo: async (_: void, args: any, { user }: { user: any }) => {
+            // Verificar si el usuario está autenticado
+            if (!user) {
+                throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
+            }
+
             try {
-                const deletePromo = await PromotionSchema.findByIdAndDelete(args.promotion.id );
+                const deletePromo = await PromotionSchema.findByIdAndDelete(args.promotion.id);
                 return deletePromo
             } catch (error) {
                 console.error(error);
@@ -34,5 +45,3 @@ const  promotionResolver = {
 }
 
 export default promotionResolver;
-
-
