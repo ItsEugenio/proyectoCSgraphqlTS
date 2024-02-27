@@ -3,6 +3,11 @@ import { Schema, model } from 'mongoose';
 interface Consumer {
   id: string;
   url: string;
+  createPromociones: boolean;
+  deletePromociones: boolean;
+  createProductos: boolean;
+  deleteProductos: boolean;
+  createServicios: boolean;
 }
 
 const consumerSchema = new Schema<Consumer>({
@@ -14,6 +19,21 @@ const consumerSchema = new Schema<Consumer>({
   url: {
     type: String,
     required: true
+  },
+  createPromociones: {
+    type: Boolean
+  },
+  deletePromociones: {
+    type: Boolean
+  },
+  createProductos: {
+    type: Boolean
+  },
+  deleteProductos: {
+    type: Boolean
+  },
+  createServicios: {
+    type: Boolean
   }
 });
 

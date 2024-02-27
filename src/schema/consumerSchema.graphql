@@ -1,11 +1,21 @@
 type Consumer {
   id: String!
   url: String!
+  createPromociones: Boolean
+  deletePromociones: Boolean
+  createProductos: Boolean
+  deleteProductos: Boolean
+  createServicios: Boolean
 }
 
 input ConsumerInput {
   id: String!
   url: String!
+  createPromociones: Boolean
+  deletePromociones: Boolean
+  createProductos: Boolean
+  deleteProductos: Boolean
+  createServicios: Boolean
 }
 
 type Query {

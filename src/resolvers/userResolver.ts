@@ -13,7 +13,6 @@ const userResolver = {
   },
   Mutation: {
     createUser: async (_: AnyObject, { userInput }: { userInput: any }, { user }: { user: any }) => {
-      // Verificar si el usuario está autenticado
       if (!user) {
         throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
       }
@@ -30,7 +29,6 @@ const userResolver = {
       return await newUser.save();
     },
     deleteUser: async (_: any, { username }: { username: string }, { user }: { user: any }) => {
-      // Verificar si el usuario está autenticado
       if (!user) {
         throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
       }

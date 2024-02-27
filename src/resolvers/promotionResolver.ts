@@ -1,6 +1,5 @@
 import { PromotionSchema } from "../models/promotion";
-import { authenticateJWT } from '../middlewares/authenticationJWT';
-
+import { sendNotifications } from "../hooks/webhookSender";
 const promotionResolver = {
     Query: {
         getPromotions: async () => await PromotionSchema.find(),
@@ -13,7 +12,6 @@ const promotionResolver = {
     },
     Mutation: {
         createPromo: async (_: void, args: any, { user }: { user: any }) => {
-            // Verificar si el usuario está autenticado
             if (!user) {
                 throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
             }
@@ -21,6 +19,12 @@ const promotionResolver = {
             const { description } = args.promotion;
             try {
                 const newPromo = await PromotionSchema.create({ description });
+                const data = {
+                    evento: "createPromociones",
+                    message: "Se ha creado una nueva promoción",
+                    data: newPromo
+                }
+                sendNotifications(data)
                 return newPromo
             } catch (error) {
                 console.error(error);
@@ -28,13 +32,19 @@ const promotionResolver = {
             }
         },
         deletePromo: async (_: void, args: any, { user }: { user: any }) => {
-            // Verificar si el usuario está autenticado
             if (!user) {
                 throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
             }
 
             try {
+
                 const deletePromo = await PromotionSchema.findByIdAndDelete(args.promotion.id);
+                const data = {
+                    evento: "deletePromociones",
+                    message: "Se ha eliminado una promoción",
+                    data: deletePromo
+                }
+                sendNotifications(data)
                 return deletePromo
             } catch (error) {
                 console.error(error);

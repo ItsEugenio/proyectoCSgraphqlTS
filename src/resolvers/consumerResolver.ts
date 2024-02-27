@@ -8,19 +8,23 @@ const consumerResolver = {
   },
   Mutation: {
     createConsumer: async (_: any, { consumerInput }: { consumerInput: any }, { user }: { user: any }) => {
-      // Verificar si el usuario está autenticado
       if (!user) {
         throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
       }
 
-      const { id, url } = consumerInput;
+      const { id, url, createPromociones, deletePromociones, createProductos, deleteProductos, createServicios } = consumerInput;
       const existingConsumer = await ConsumerModel.findOne({ id });
       if (existingConsumer) {
         throw new Error('Consumer already exists');
       }
       const newConsumer = new ConsumerModel({
         id,
-        url
+        url,
+        createPromociones,
+        deletePromociones,
+        createProductos,
+        deleteProductos,
+        createServicios
       });
       return await newConsumer.save();
     }

@@ -13,7 +13,6 @@ const productResolver = {
     },
     Mutation: {
         createProduct: async (_: void, args: any, { user }: { user: any }) => {
-            // Verificar si el usuario está autenticado
             if (!user) {
                 throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
             }
@@ -28,7 +27,6 @@ const productResolver = {
             }
         },
         deleteProduct: async (_: void, args: any, { user }: { user: any }) => {
-            // Verificar si el usuario está autenticado
             if (!user) {
                 throw new Error('No autenticado. Debe iniciar sesión para realizar esta acción.');
             }
