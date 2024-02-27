@@ -1,0 +1,22 @@
+   type Promotion {
+        id: ID
+        description: String
+    }
+
+   input PromoInput {
+        description: String
+    }
+
+    input PromoDelete {
+        id: ID!
+    }
+
+    type Query {
+        getPromotions: [Promotion]
+        promotionByID(id: ID): Promotion
+        promosPag(page: Int!, pageSize: Int!): [Promotion]
+    }
+    type Mutation {
+        createPromo(promotion: PromoInput): Promotion
+        deletePromo(promotion: PromoDelete): Promotion
+    }    

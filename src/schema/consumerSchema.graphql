@@ -1,0 +1,17 @@
+type Consumer {
+  id: String!
+  url: String!
+}
+
+input ConsumerInput {
+  id: String!
+  url: String!
+}
+
+type Query {
+  getConsumers: [Consumer]!
+}
+
+type Mutation {
+  createConsumer(consumerInput: ConsumerInput!): Consumer!
+}
