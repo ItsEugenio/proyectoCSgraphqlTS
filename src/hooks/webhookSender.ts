@@ -18,10 +18,10 @@ export const sendNotifications = async (data: any) => {
             urls = await ConsumerModel.find({ deleteProductos: true }).select('url');
             break;
         case "createService":
-            urls = await ConsumerModel.find({ createService: true }).select('url');
+            urls = await ConsumerModel.find({ createServicios: true }).select('url');
                 break;
         case "deleteService":
-            urls = await ConsumerModel.find({ deleteService: true }).select('url')
+            urls = await ConsumerModel.find({ deleteServicios: true }).select('url')
                 break;
         default:
             urls = [];
